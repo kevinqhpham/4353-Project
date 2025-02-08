@@ -1,7 +1,7 @@
 
 # Getting Started 
 
-'Clone this repo and use your name to make a new branch'
+`Clone this repo and use your name to make a new branch`
 
 ## Available Scripts
 
