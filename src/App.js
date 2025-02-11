@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import UserHeader from './components/UserHeader.js'
 import HomeHeader from './components/HomeHeader.js'
