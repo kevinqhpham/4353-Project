@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import UserHeader from '../components/UserHeader.js';
+import AdminHeader from '../components/AdminHeader.js';
 
-function UserPage() {
+function AdminPage() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -10,9 +10,9 @@ function UserPage() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center p-6">
       <div className = "header">
-          <UserHeader/>
+          <AdminHeader/>
       </div>
       <div className = "logout">
         <button onClick={handleLogout}>
@@ -23,4 +23,4 @@ function UserPage() {
   );
 }
 
-export default UserPage;
+export default AdminPage;
