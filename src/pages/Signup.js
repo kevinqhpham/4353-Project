@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import HomeHeader from '../components/HomeHeader.js'
 function Signup() {
   const [user, setUser] = useState({ email: "", password: "" });
   const navigate = useNavigate();
@@ -23,14 +23,17 @@ function Signup() {
   };
 
   return (
-    <div className="flex flex-col items-center p-6">
-      <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-      <form onSubmit={handleSubmit} className="space-y-4 w-80">
+    <div>
+      <div className = "header">
+          <HomeHeader/>
+      </div>
+      <div className = "signup">
+      <h2>Sign Up</h2>
+      <form onSubmit={handleSubmit}>
         <input
           type="email"
           name="email"
           placeholder="Email"
-          className="border p-2 w-full"
           onChange={handleChange}
           required
         />
@@ -38,17 +41,17 @@ function Signup() {
           type="password"
           name="password"
           placeholder="Password"
-          className="border p-2 w-full"
           onChange={handleChange}
           required
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 w-full">
+        <button type="submit">
           Sign Up
         </button>
       </form>
       <p className="mt-2">
-        Already have an account? <a href="/login" className="text-blue-600">Login</a>
+        Already have an account? <a href="/login">Login</a>
       </p>
+      </div>
     </div>
   );
 }

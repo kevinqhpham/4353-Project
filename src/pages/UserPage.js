@@ -11,10 +11,14 @@ function UserPage() {
 
   return (
     <div className="flex flex-col items-center p-6">
-      <UserHeader/>
-      <button onClick={handleLogout} className="bg-red-500 text-white p-2 mt-4">
-        Logout
-      </button>
+      <div className = "header">
+          <UserHeader/>
+      </div>
+      <div className = "logout">
+        <button onClick={handleLogout}>
+            Logout
+        </button>
+      </div>
     </div>
   );
 }
