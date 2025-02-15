@@ -11,7 +11,7 @@ const AdminEvents = () => {
   const [errors, setErrors] = useState({});
 
   // Example options for skills and urgency – adjust as needed.
-  const skillsOptions = ["Communication", "First Aid", "Technical Support", "Organizing"];
+  const skillsOptions = ["Lift heavy objects", "Empathy", "Teamwork", "Leadership"];
   const urgencyOptions = ["Low", "Medium", "High"];
 
   const handleSubmit = (e) => {
