@@ -27,7 +27,7 @@ const AdminEvents = () => {
   const mockVolunteers = [
     { id: 1, name: 'Al Raja', skills: ['Empathy', 'Teamwork'] },
     { id: 2, name: 'LeBron James', skills: ['Lift heavy objects'] },
-    { id: 3, name: 'Kevin Durant', skills: [Leadership'] },
+    { id: 3, name: 'Kevin Durant', skills: ['Leadership'] },
   ];
 
   // Example event data for matching (You could also store newly created events here)
