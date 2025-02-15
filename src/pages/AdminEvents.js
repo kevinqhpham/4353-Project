@@ -25,16 +25,16 @@ const AdminEvents = () => {
 
   // Mock arrays for demonstration (In real app, fetch from DB or use global state)
   const mockVolunteers = [
-    { id: 1, name: 'John Doe', skills: ['Communication', 'First Aid'] },
-    { id: 2, name: 'Jane Smith', skills: ['Technical Support', 'Organizing'] },
-    { id: 3, name: 'Sam Johnson', skills: ['First Aid', 'Organizing'] },
+    { id: 1, name: 'Al Raja', skills: ['Empathy', 'Teamwork'] },
+    { id: 2, name: 'LeBron James', skills: ['Lift heavy objects'] },
+    { id: 3, name: 'Kevin Durant', skills: [Leadership'] },
   ];
 
   // Example event data for matching (You could also store newly created events here)
   const mockEvents = [
-    { id: 101, eventName: 'Blood Drive', requiredSkills: ['First Aid', 'Communication'] },
-    { id: 102, eventName: 'Tech Conference', requiredSkills: ['Technical Support'] },
-    { id: 103, eventName: 'Food Drive', requiredSkills: ['Organizing'] },
+    { id: 101, eventName: 'Blood Drive', requiredSkills: ['Empathy', 'Teamwork'] },
+    { id: 102, eventName: 'Houston Food Bank', requiredSkills: ['Lift heavy objects'] },
+    { id: 103, eventName: 'Homeless Shelter', requiredSkills: ['Leadership'] },
   ];
 
   // -----------------------------
