@@ -27,6 +27,7 @@ router.post('/signup', async (req, res) => {
 
         res.status(201).json({ message: 'Signup successful' });
     } catch (error) {
+        console.error('Signup error:', error);
         res.status(500).json({ message: 'Server error during signup' });
     }
 });
@@ -34,6 +35,10 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Please provide email and password' });
+        }
 
         const user = users.find(u => u.email === email);
 
@@ -43,6 +48,7 @@ router.post('/login', async (req, res) => {
             res.status(401).json({ message: 'Invalid credentials' });
         }
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({ message: 'Server error during login' });
     }
 });
