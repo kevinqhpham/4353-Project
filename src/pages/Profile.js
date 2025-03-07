@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserHeader from '../components/UserHeader.js';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './profile.module.css';
 
 const Profile = () => {
+    useEffect(() => {
+        fetch('http://localhost:5000/api/profile')
+            .then(response => response.json())
+            .then(data => setFormData(data))
+            .catch(error => console.error('Error fetching profile:', error));
+    }, []);
+    
     const [formData, setFormData] = useState({
         fullName: '',
         address1: '',
@@ -88,11 +95,17 @@ const Profile = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log('Profile Submitted:', formData);
-            alert('Profile saved successfully!');
+            fetch('http://localhost:5000/api/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error updating profile:', error));
         }
     };
-
+    
     return (
         <div>
             <div className="header">
