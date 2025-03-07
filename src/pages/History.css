@@ -1,0 +1,88 @@
+/* General Page Styles */
+.history-container {
+    max-width: 90%;
+    margin: auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Header */
+.history-header {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Table Styling */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.history-table thead {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.history-table th, .history-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.history-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Urgency Colors */
+.urgency-high {
+    color: red;
+    font-weight: bold;
+}
+
+.urgency-medium {
+    color: orange;
+    font-weight: bold;
+}
+
+.urgency-low {
+    color: green;
+    font-weight: bold;
+}
+
+/* Status Styling */
+.status {
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+}
+
+.status-participated {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.status-canceled {
+    background-color: #f44336;
+    color: white;
+}
+
+.status-no-show {
+    background-color: #ff9800;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .history-table {
+        font-size: 14px;
+    }
+}
