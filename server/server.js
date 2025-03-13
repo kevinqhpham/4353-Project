@@ -5,12 +5,18 @@ const pool = require('./db');
 const authRoutes = require(path.join(__dirname, 'routes', 'authRoutes'));
 const historyRoutes = require(path.join(__dirname, 'routes', 'historyRoutes')); 
 const matchingRoutes = require(path.join(__dirname, 'routes', 'matchingRoutes'));
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8d9cba8e18b3d88791ac5f5df5c526eb2e597996
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/match', matchingRoutes);
+
 
 app.get('/api/test-db', async (req, res) => {
   try {
