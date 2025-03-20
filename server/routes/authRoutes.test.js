@@ -7,7 +7,6 @@ const app = express();
 app.use(express.json());
 app.use('/auth', authRoutes);
 
-// Reset mocks after each test
 afterEach(() => {
     jest.restoreAllMocks();
 });
@@ -71,7 +70,6 @@ describe('Auth Routes', () => {
     });
 
     it('should handle server errors during signup', async () => {
-        // Mock the hash function to throw an error
         jest.spyOn(bcrypt, 'hash').mockImplementation(() => {
             throw new Error('Server error');
         });
@@ -85,12 +83,10 @@ describe('Auth Routes', () => {
     });
 
     it('should handle server errors during login', async () => {
-        // First create a user so we can attempt to log in
         await request(app)
             .post('/auth/signup')
             .send({ email: 'login-test@example.com', password: 'password123' });
 
-        // Then mock compare to throw an error
         jest.spyOn(bcrypt, 'compare').mockImplementation(() => {
             throw new Error('Server error');
         });

@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HomeHeader from '../components/HomeHeader.js'
 
-function Signup() {
-  const [user, setUser] = useState({ email: "", password: "" });
+function SignUp() {
+  const [user, setUser] = useState({ username: "", email: "", password: "", confirmPassword: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -12,26 +13,38 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
+    if (user.password !== user.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    
+    setError("");
+    
     try {
-      const response = await fetch('http://localhost:5000/api/auth/signup', {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify({
+          username: user.username,
+          email: user.email,
+          password: user.password
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message);
-        navigate("/login");
+        localStorage.setItem('token', data.token);
+        alert("Registration successful!");
+        navigate("/userpage");
       } else {
-        alert(data.message);
+        setError(data.message || "Registration failed");
       }
     } catch (error) {
-      alert('Network error. Please try again.');
+      setError('Network error. Please try again.');
     }
   };
 
@@ -41,32 +54,51 @@ function Signup() {
         <HomeHeader/>
       </div>
       <div className="signup">
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">
-          Sign Up
-        </button>
-      </form>
-      <p className="mt-2">
-        Already have an account? <a href="/login">Login</a>
-      </p>
+        <h2>Sign Up</h2>
+        {error && <p className="text-red-500">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            className="border p-2 w-full"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            className="border p-2 w-full"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="border p-2 w-full"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            className="border p-2 w-full"
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">
+            Sign Up
+          </button>
+        </form>
+        <p className="mt-2">
+          Already have an account? <a href="/login">Login</a>
+        </p>
       </div>
     </div>
   );
 }
 
-export default Signup;
+export default SignUp;
