@@ -1,10 +1,15 @@
 const request = require('supertest');
 const express = require('express');
+const bcrypt = require('bcrypt');
 const authRoutes = require('./authRoutes');
 
 const app = express();
 app.use(express.json());
 app.use('/auth', authRoutes);
+
+afterEach(() => {
+    jest.restoreAllMocks();
+});
 
 describe('Auth Routes', () => {
     it('should sign up a new user', async () => {
@@ -65,26 +70,30 @@ describe('Auth Routes', () => {
     });
 
     it('should handle server errors during signup', async () => {
-        jest.spyOn(require('bcrypt'), 'hash').mockImplementation(() => {
+        jest.spyOn(bcrypt, 'hash').mockImplementation(() => {
             throw new Error('Server error');
         });
 
         const res = await request(app)
             .post('/auth/signup')
-            .send({ email: 'test@example.com', password: 'password123' });
+            .send({ email: 'unique@example.com', password: 'password123' });
 
         expect(res.statusCode).toEqual(500);
         expect(res.body).toHaveProperty('message', 'Server error during signup');
     });
 
     it('should handle server errors during login', async () => {
-        jest.spyOn(require('bcrypt'), 'compare').mockImplementation(() => {
+        await request(app)
+            .post('/auth/signup')
+            .send({ email: 'login-test@example.com', password: 'password123' });
+
+        jest.spyOn(bcrypt, 'compare').mockImplementation(() => {
             throw new Error('Server error');
         });
 
         const res = await request(app)
             .post('/auth/login')
-            .send({ email: 'test@example.com', password: 'password123' });
+            .send({ email: 'login-test@example.com', password: 'password123' });
 
         expect(res.statusCode).toEqual(500);
         expect(res.body).toHaveProperty('message', 'Server error during login');
