@@ -4,6 +4,7 @@ import HomeHeader from '../components/HomeHeader.js'
 
 function Login() {
   const [user, setUser] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -12,6 +13,8 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    setError("");
 
     try {
       const response = await fetch('http://localhost:5000/api/auth/login', {
@@ -25,13 +28,14 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message);
+        localStorage.setItem('token', data.token);
+        alert("Login successful!");
         navigate("/userpage");
       } else {
-        alert(data.message);
+        setError(data.message || "Login failed");
       }
     } catch (error) {
-      alert('Network error. Please try again.');
+      setError('Network error. Please try again.');
     }
   };
 
@@ -41,31 +45,32 @@ function Login() {
         <HomeHeader/>
       </div>
       <div className="login">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="border p-2 w-full"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="border p-2 w-full"
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">
-          Login
-        </button>
-      </form>
-      <p className="mt-2">
-        Don't have an account? <a href="/">Sign Up</a>
-      </p>
+        <h2>Login</h2>
+        {error && <p className="text-red-500">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            className="border p-2 w-full"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="border p-2 w-full"
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">
+            Login
+          </button>
+        </form>
+        <p className="mt-2">
+          Don't have an account? <a href="/">Sign Up</a>
+        </p>
       </div>
     </div>
   );
