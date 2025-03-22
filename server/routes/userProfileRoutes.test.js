@@ -8,10 +8,10 @@ app.use("/userprofile", userProfileRoutes);
 
 describe("User Profile Routes", () => {
     it("should retrieve the user profile", async () => {
-        const res = await request(app).get("/userprofile/");
+        const res = await request(app).get("/userprofile");
         expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveProperty("fullName", "Tom Huynh");
-        expect(res.body).toHaveProperty("city", "Houston");
+        expect(res.body).toHaveProperty("fullName");
+        expect(res.body).toHaveProperty("city");
     });
 
     it("should update the user profile with valid data", async () => {

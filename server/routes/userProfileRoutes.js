@@ -1,43 +1,51 @@
 const express = require('express');
 const router = express.Router();
+const { createClient } = require('@supabase/supabase-js');
 
-let userProfile = {
-    fullName: 'Tom Huynh',
-    address1: '123 Main St',
-    address2: '',
-    city: 'Houston',
-    state: 'TX',
-    zipCode: '77004',
-    skills: ['Communication', 'Problem-solving'],
-    preferences: 'In person preferred',
-    availability: ['2024-02-20', '2024-02-25']
-};
+const supabaseUrl = 'https://ngnaehayrjwlccyguvia.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbmFlaGF5cmp3bGNjeWd1dmlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5MzE2NjksImV4cCI6MjA1NzUwNzY2OX0.XYPIwnE8vZGnXo17d5o0lOoO7Tit4omsN_UPBRdOKUM';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-const validateProfile = (data) => {
-    let errors = {};
-    if (!data.fullName || data.fullName.length > 50) errors.fullName = 'Full name is required (Max 50 characters)';
-    if (!data.address1 || data.address1.length > 100) errors.address1 = 'Address 1 is required (Max 100 characters)';
-    if (!data.city || data.city.length > 100) errors.city = 'City is required (Max 100 characters)';
-    if (!data.state) errors.state = 'State is required';
-    if (!data.zipCode || data.zipCode.length < 5 || data.zipCode.length > 9) errors.zipCode = 'Zip code must be 5-9 characters';
-    if (data.skills.length === 0) errors.skills = 'At least one skill must be selected';
-    if (data.availability.length === 0) errors.availability = 'Select at least one available date';
+router.get('/', async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('user_profile')
+            .select('*')
+            .single();
 
-    return errors;
-};
+        if (error) throw error;
 
-router.get('/', (req, res) => {
-    res.json(userProfile);
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving profile', error: error.message });
+    }
 });
 
-router.post('/', (req, res) => {
-    const errors = validateProfile(req.body);
-    if (Object.keys(errors).length > 0) {
-        return res.status(400).json({ errors });
+router.post('/', async (req, res) => {
+    const { fullName, address1, address2, city, state, zipCode, skills, preferences, availability } = req.body;
+
+    const { data, error } = await supabase
+        .from('user_profiles')
+        .upsert([
+            {
+                id: 1,  // Assuming you're updating the profile of user with ID 1
+                full_name: fullName,
+                address1: address1,
+                address2: address2,
+                city: city,
+                state: state,
+                zip_code: zipCode,
+                skills: skills.join(','),
+                preferences: preferences,
+                availability: availability.map(date => new Date(date).toISOString())
+            }
+        ]);
+
+    if (error) {
+        return res.status(400).json({ error: error.message });
     }
 
-    userProfile = { ...req.body };
-    res.json({ message: 'Profile updated successfully!', userProfile });
+    res.json({ message: 'Profile updated successfully!', userProfile: data });
 });
 
 module.exports = router;

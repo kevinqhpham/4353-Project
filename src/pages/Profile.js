@@ -3,14 +3,32 @@ import UserHeader from '../components/UserHeader.js';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './profile.module.css';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = 'https://ngnaehayrjwlccyguvia.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbmFlaGF5cmp3bGNjeWd1dmlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5MzE2NjksImV4cCI6MjA1NzUwNzY2OX0.XYPIwnE8vZGnXo17d5o0lOoO7Tit4omsN_UPBRdOKUM';
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Profile = () => {
     useEffect(() => {
-        fetch('http://localhost:5000/api/profile')
-            .then(response => response.json())
-            .then(data => setFormData(data))
-            .catch(error => console.error('Error fetching profile:', error));
+        const fetchProfile = async () => {
+            const { data, error } = await supabase
+                .from('user_profile')
+                .select('*')
+                .eq('id')
+                .single(); 
+    
+            if (error) {
+                console.error('Error fetching profile:', error);
+            } else {
+                setFormData(data);
+            }
+        };
+    
+        fetchProfile();
     }, []);
+    
     
     const [formData, setFormData] = useState({
         fullName: '',
@@ -92,19 +110,35 @@ const Profile = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+    
         if (validateForm()) {
-            fetch('http://localhost:5000/api/profile', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => console.error('Error updating profile:', error));
+            const { error } = await supabase
+                .from('user_profile')
+                .upsert([
+                    {
+                        id: 1,  // Assuming you're updating the profile for user with ID 1
+                        full_name: formData.fullName,
+                        address1: formData.address1,
+                        address2: formData.address2,
+                        city: formData.city,
+                        state: formData.state,
+                        zip_code: formData.zipCode,
+                        skills: formData.skills.join(','),
+                        preferences: formData.preferences,
+                        availability: formData.availability.map(date => date.toISOString())
+                    }
+                ]);
+    
+            if (error) {
+                console.error('Error updating profile:', error);
+            } else {
+                alert('Profile updated successfully!');
+            }
         }
     };
+    
     
     return (
         <div>
