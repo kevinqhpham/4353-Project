@@ -4,6 +4,7 @@ import HomeHeader from '../components/HomeHeader.js'
 
 function Login() {
   const [user, setUser] = useState({ email: "", password: "" });
+  const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -11,11 +12,15 @@ function Login() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  const handleCheckboxChange = (e) => {
+    setIsAdmin(e.target.checked);  
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+  
     setError("");
-
+  
     try {
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
@@ -24,13 +29,20 @@ function Login() {
         },
         body: JSON.stringify(user),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         localStorage.setItem('token', data.token);
+  
         alert("Login successful!");
-        navigate("/userpage");
+  
+        if (isAdmin) {
+          navigate("/adminpage");
+        } else {
+          navigate("/userpage");
+        }
+  
       } else {
         setError(data.message || "Login failed");
       }
@@ -64,6 +76,14 @@ function Login() {
             onChange={handleChange}
             required
           />
+          <label className = "checkbox">
+             Are you an admin
+             <input
+               type="checkbox"
+               checked={isAdmin}
+               onChange={handleCheckboxChange}
+             />
+           </label>
           <button type="submit">
             Login
           </button>

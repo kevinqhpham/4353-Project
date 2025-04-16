@@ -42,6 +42,7 @@ const UserHeader = () => {
             <Link to='/userpage' style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Home</Link>
             <Link to='/profile' style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Profile</Link>
             <Link to='/history' style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>History</Link>
+            <Link to='/login' style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Logout</Link>
             <button onClick={togglePopup}>Inbox</button>
             {isPopupOpen && (
                 <div style={popupStyles.overlay}>

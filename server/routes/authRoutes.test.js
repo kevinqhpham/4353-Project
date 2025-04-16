@@ -4,16 +4,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
 
-// Mock dependencies
 jest.mock('../db');
 jest.mock('bcrypt');
 jest.mock('jsonwebtoken');
 
-// Set up express app for testing
 const app = express();
 app.use(express.json());
 
-// Import routes
 const authRoutes = require('../routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
@@ -24,14 +21,12 @@ describe('Auth Routes', () => {
 
   describe('POST /register', () => {
     test('should register a new user successfully', async () => {
-      // Mock bcrypt
       bcrypt.genSalt.mockResolvedValue('mockedSalt');
       bcrypt.hash.mockResolvedValue('hashedPassword');
       
-      // Mock db query responses
       pool.query.mockImplementation((query) => {
         if (query.includes('SELECT')) {
-          return { rows: [] }; // No existing user
+          return { rows: [] };
         } else {
           return {
             rows: [{
@@ -44,7 +39,6 @@ describe('Auth Routes', () => {
         }
       });
       
-      // Mock jwt
       jwt.sign.mockReturnValue('test-token');
       
       const response = await request(app)
@@ -65,7 +59,6 @@ describe('Auth Routes', () => {
     });
     
     test('should return error if user already exists', async () => {
-      // Mock db query response for existing user
       pool.query.mockResolvedValue({
         rows: [{ id: 1, email: 'test@example.com' }]
       });
@@ -81,11 +74,25 @@ describe('Auth Routes', () => {
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty('message', 'User already exists with this email');
     });
+    
+    test('should handle server errors during registration', async () => {
+      pool.query.mockRejectedValue(new Error('Database error'));
+      
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send({
+          username: 'testuser',
+          email: 'test@example.com',
+          password: 'password123'
+        });
+      
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('message', 'Server error during registration');
+    });
   });
 
   describe('POST /login', () => {
     test('should login user successfully with correct credentials', async () => {
-      // Mock user in db
       pool.query.mockResolvedValue({
         rows: [{
           id: 1,
@@ -95,10 +102,8 @@ describe('Auth Routes', () => {
         }]
       });
       
-      // Mock password comparison
       bcrypt.compare.mockResolvedValue(true);
       
-      // Mock jwt
       jwt.sign.mockReturnValue('test-token');
       
       const response = await request(app)
@@ -115,7 +120,6 @@ describe('Auth Routes', () => {
     });
     
     test('should return error with incorrect password', async () => {
-      // Mock user in db
       pool.query.mockResolvedValue({
         rows: [{
           id: 1,
@@ -124,7 +128,6 @@ describe('Auth Routes', () => {
         }]
       });
       
-      // Mock password comparison fail
       bcrypt.compare.mockResolvedValue(false);
       
       const response = await request(app)
@@ -139,7 +142,6 @@ describe('Auth Routes', () => {
     });
     
     test('should return error if user does not exist', async () => {
-      // Mock no user found
       pool.query.mockResolvedValue({ rows: [] });
       
       const response = await request(app)
@@ -152,14 +154,26 @@ describe('Auth Routes', () => {
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty('message', 'Invalid email or password');
     });
+    
+    test('should handle server errors during login', async () => {
+      pool.query.mockRejectedValue(new Error('Database error'));
+      
+      const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: 'test@example.com',
+          password: 'password123'
+        });
+      
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('message', 'Server error during login');
+    });
   });
 
   describe('GET /me', () => {
     test('should return user data when authenticated', async () => {
-      // Mock jwt verification
       jwt.verify.mockReturnValue({ id: 1 });
       
-      // Mock user found in db
       pool.query.mockResolvedValue({
         rows: [{
           id: 1,
@@ -183,6 +197,32 @@ describe('Auth Routes', () => {
       
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty('message', 'Authentication required');
+    });
+    
+    test('should return error when token is invalid', async () => {
+      jwt.verify.mockImplementation(() => {
+        throw new Error('Invalid token');
+      });
+      
+      const response = await request(app)
+        .get('/api/auth/me')
+        .set('Authorization', 'Bearer invalid-token');
+      
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('message', 'Authentication failed');
+    });
+    
+    test('should return error when user not found after token verification', async () => {
+      jwt.verify.mockReturnValue({ id: 999 });
+      
+      pool.query.mockResolvedValue({ rows: [] });
+      
+      const response = await request(app)
+        .get('/api/auth/me')
+        .set('Authorization', 'Bearer test-token');
+      
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty('message', 'Authentication failed');
     });
   });
 });
