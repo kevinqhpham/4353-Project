@@ -118,7 +118,7 @@ const Profile = () => {
                 .from('user_profile')
                 .upsert([
                     {
-                        id: 1,  // Assuming you're updating the profile for user with ID 1
+                        id: 2,
                         full_name: formData.fullName,
                         address1: formData.address1,
                         address2: formData.address2,
@@ -132,7 +132,7 @@ const Profile = () => {
                 ]);
     
             if (error) {
-                console.error('Error updating profile:', error);
+                console.error('Error updating profile:', error.message);
             } else {
                 alert('Profile updated successfully!');
             }

@@ -11,24 +11,41 @@ router.get('/', async (req, res) => {
         const { data, error } = await supabase
             .from('user_profile')
             .select('*')
+            .eq('id', 2) 
             .single();
 
         if (error) throw error;
 
         res.json(data);
     } catch (error) {
+        console.error('Error retrieving profile:', error);
         res.status(500).json({ message: 'Error retrieving profile', error: error.message });
     }
 });
 
+
 router.post('/', async (req, res) => {
     const { fullName, address1, address2, city, state, zipCode, skills, preferences, availability } = req.body;
 
+    if (!fullName || !address1 || !city || !state || !zipCode || !skills.length || !availability.length) {
+        return res.status(400).json({
+            errors: {
+                full_name: 'Full name is required',
+                address1: 'Address1 is required',
+                city: 'City is required',
+                state: 'State is required',
+                zipCode: 'Zip code is required',
+                skills: 'At least one skill is required',
+                availability: 'At least one date of availability is required'
+            }
+        });
+    }
+
     const { data, error } = await supabase
-        .from('user_profiles')
+        .from('user_profile')
         .upsert([
             {
-                id: 1,  // Assuming you're updating the profile of user with ID 1
+                id: 2,  // Assuming you're updating the profile for user with ID 1
                 full_name: fullName,
                 address1: address1,
                 address2: address2,
@@ -47,5 +64,6 @@ router.post('/', async (req, res) => {
 
     res.json({ message: 'Profile updated successfully!', userProfile: data });
 });
+
 
 module.exports = router;

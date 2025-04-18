@@ -37,14 +37,14 @@ describe("User Profile Routes", () => {
         const invalidProfile = {
             fullName: "",
             address1: "",
-            city: "Houston",
-            state: "TX",
-            zipCode: "77004",
+            city: "",
+            state: "",
+            zipCode: "",
             skills: [],
-            preferences: "In person preferred",
-            availability: []
+            preferences: "",
+            availability: [],
         };
-
+    
         const res = await request(app).post("/userprofile/").send(invalidProfile);
         expect(res.statusCode).toBe(400);
         expect(res.body.errors).toHaveProperty("fullName");
@@ -52,4 +52,5 @@ describe("User Profile Routes", () => {
         expect(res.body.errors).toHaveProperty("skills");
         expect(res.body.errors).toHaveProperty("availability");
     });
+    
 });
