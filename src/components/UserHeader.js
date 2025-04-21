@@ -5,11 +5,12 @@ const UserHeader = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const inboxRef = useRef(null);
 
-    const notifications = [
-        "You have a new message!",
-        "Your profile was updated successfully.",
-        "Reminder: Complete your profile setup.",
-    ];
+    useEffect(() => {
+        fetch("/notifications")
+            .then(response => response.json())
+            .then(data => setNotifications(data))
+            .catch(error => console.error("Error fetching notifications:", error));
+    }, []);
 
     const togglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
