@@ -6,6 +6,7 @@ const pool = require('./db');
 const authRoutes = require(path.join(__dirname, 'routes', 'authRoutes'));
 const historyRoutes = require(path.join(__dirname, 'routes', 'historyRoutes')); 
 const matchingRoutes = require(path.join(__dirname, 'routes', 'matchingRoutes'));
+const admineventsRoutes = require('./routes/admineventsRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
