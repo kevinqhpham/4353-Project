@@ -1,6 +1,7 @@
 const request = require('supertest');
 const express = require('express');
 const eventsRouter = require('./admineventsRoutes');
+const pool = require('../db'); // Import the pool to close the connection
 
 const app = express();
 app.use(express.json());
@@ -13,6 +14,10 @@ beforeEach(() => {
 });
 
 describe('Event API Tests', () => {
+    afterAll(async () => {
+        await pool.end(); // Close the database connection pool
+    });
+
     it('should create a new event', async () => {
         const newEvent = {
             title: "Test Event",
@@ -30,8 +35,8 @@ describe('Event API Tests', () => {
         expect(response.body).toHaveProperty('id');
         expect(response.body.title).toBe(newEvent.title);
         expect(response.body.description).toBe(newEvent.description);
-        expect(response.body.date).toBe(newEvent.date);
-        expect(response.body.time).toBe(newEvent.time);
+        expect(new Date(response.body.date).toISOString().split('T')[0]).toBe(newEvent.date);
+        expect(response.body.time).toBe("12:00:00");
         expect(response.body.location).toBe(newEvent.location);
     });
 

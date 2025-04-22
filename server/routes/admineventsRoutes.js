@@ -1,22 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../db'); // Import PostgreSQL pool connection
+const pool = require('../db');
 
 // Get all events
 router.get('/', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM events ORDER BY date ASC');
+        const result = await pool.query('SELECT * FROM events');
         res.json(result.rows);
-    } catch (error) {
-        console.error('Error fetching events:', error);
-        res.status(500).json({ error: 'Internal server error' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
     }
 });
 
 // Create a new event
 router.post('/', async (req, res) => {
     const { title, description, date, time, location } = req.body;
-
     if (!title || !date || !time) {
         return res.status(400).json({ message: 'Title, date, and time are required' });
     }
@@ -27,9 +26,9 @@ router.post('/', async (req, res) => {
             [title, description, date, time, location]
         );
         res.status(201).json(result.rows[0]);
-    } catch (error) {
-        console.error('Error creating event:', error);
-        res.status(500).json({ error: 'Internal server error' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
     }
 });
 
@@ -49,9 +48,9 @@ router.put('/:id', async (req, res) => {
         }
 
         res.json(result.rows[0]);
-    } catch (error) {
-        console.error('Error updating event:', error);
-        res.status(500).json({ error: 'Internal server error' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
     }
 });
 
@@ -67,9 +66,9 @@ router.delete('/:id', async (req, res) => {
         }
 
         res.json({ message: 'Event deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting event:', error);
-        res.status(500).json({ error: 'Internal server error' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
     }
 });
 
