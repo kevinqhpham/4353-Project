@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import UserHeader from '../components/UserHeader.js';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './profile.module.css';
+import './Profile.css'; // Import the CSS file
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://ngnaehayrjwlccyguvia.supabase.co';
@@ -28,7 +28,6 @@ const Profile = () => {
     
         fetchProfile();
     }, []);
-    
     
     const [formData, setFormData] = useState({
         fullName: '',
@@ -148,30 +147,30 @@ const Profile = () => {
             <div className="body">
                 <h1>Profile</h1>
                 <form onSubmit={handleSubmit}>
-                    <div>
+                    <div className="form-group">
                         <label>Full Name:</label>
                         <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} maxLength="50" required />
                         {errors.fullName && <p className="error">{errors.fullName}</p>}
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label>Address 1:</label>
                         <input type="text" name="address1" value={formData.address1} onChange={handleChange} maxLength="100" required />
                         {errors.address1 && <p className="error">{errors.address1}</p>}
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label>Address 2 (Optional):</label>
                         <input type="text" name="address2" value={formData.address2} onChange={handleChange} maxLength="100" />
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label>City:</label>
                         <input type="text" name="city" value={formData.city} onChange={handleChange} maxLength="100" required />
                         {errors.city && <p className="error">{errors.city}</p>}
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label>State:</label>
                         <select name="state" value={formData.state} onChange={handleChange} required>
                             <option value="">Select a state</option>
@@ -182,13 +181,13 @@ const Profile = () => {
                         {errors.state && <p className="error">{errors.state}</p>}
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label>Zip Code:</label>
                         <input type="text" name="zipCode" value={formData.zipCode} onChange={handleChange} maxLength="9" required />
                         {errors.zipCode && <p className="error">{errors.zipCode}</p>}
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label>Skills:</label>
                         <select name="skills" multiple value={formData.skills} onChange={handleSkillsChange} required>
                             {skillsOptions.map((skill) => (
@@ -198,12 +197,12 @@ const Profile = () => {
                         {errors.skills && <p className="error">{errors.skills}</p>}
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label>Preferences (Optional):</label>
                         <textarea name="preferences" value={formData.preferences} onChange={handleChange}></textarea>
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label>Availability:</label>
                         <DatePicker
                             selected={null}
@@ -220,7 +219,7 @@ const Profile = () => {
                         ))}
                     </ul>
 
-                    <button type="submit">Save Profile</button>
+                    <button type="submit" className="submit-button">Save Profile</button>
                 </form>
             </div>
         </div>
