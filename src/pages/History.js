@@ -13,40 +13,44 @@ const VolunteerHistory = () => {
     }, []);
 
     return (
-        <div className="history-container">
-            <UserHeader />
-            <h1 className="history-header">Volunteer History</h1>
-            <div className="overflow-x-auto">
-                <table className="history-table">
-                    <thead>
-                        <tr>
-                            <th>Event Name</th>
-                            <th>Event Description</th>
-                            <th>Location</th>
-                            <th>Required Skills</th>
-                            <th>Urgency</th>
-                            <th>Event Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {events.map((event, index) => (
-                            <tr key={index}>
-                                <td>{event.name}</td>
-                                <td>{event.description}</td>
-                                <td>{event.location}</td>
-                                <td>{event.skills}</td>
-                                <td className={event.urgency === "High" ? "urgency-high" : event.urgency === "Medium" ? "urgency-medium" : "urgency-low"}>
-                                    {event.urgency}
-                                </td>
-                                <td>{event.date}</td>
-                                <td className={`status ${event.status === "Participated" ? "status-participated" : event.status === "Canceled" ? "status-canceled" : "status-no-show"}`}>
-                                    {event.status}
-                                </td>
+        <div>
+            <div className = "header">
+                    <UserHeader/>
+                </div>
+            <div className="history-container">
+                <h1 className="history-header">Volunteer History</h1>
+                <div className="overflow-x-auto">
+                    <table className="history-table">
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Event Description</th>
+                                <th>Location</th>
+                                <th>Required Skills</th>
+                                <th>Urgency</th>
+                                <th>Event Date</th>
+                                <th>Status</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {events.map((event, index) => (
+                                <tr key={index}>
+                                    <td>{event.name}</td>
+                                    <td>{event.description}</td>
+                                    <td>{event.location}</td>
+                                    <td>{event.skills}</td>
+                                    <td className={event.urgency === "High" ? "urgency-high" : event.urgency === "Medium" ? "urgency-medium" : "urgency-low"}>
+                                        {event.urgency}
+                                    </td>
+                                    <td>{event.date}</td>
+                                    <td className={`status ${event.status === "Participated" ? "status-participated" : event.status === "Canceled" ? "status-canceled" : "status-no-show"}`}>
+                                        {event.status}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

@@ -6,18 +6,13 @@ function UserPage() {
 
   const handleLogout = () => {
     alert("Logged out successfully!");
-    navigate("/login"); // Redirect to login
+    navigate("/login");
   };
 
   return (
     <div>
       <div className = "header">
           <UserHeader/>
-      </div>
-      <div className = "logout">
-        <button onClick={handleLogout}>
-            Logout
-        </button>
       </div>
     </div>
   );
