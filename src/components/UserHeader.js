@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 const UserHeader = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
     const inboxRef = useRef(null);
 
     useEffect(() => {
