@@ -17,12 +17,7 @@ function matchVolunteers(event) {
     );
 }
 
-<<<<<<< HEAD
-// API Route for matching volunteers
-router.get('/:eventId', (req, res) => {
-=======
 router.get('/match/:eventId', (req, res) => {
->>>>>>> main
     const event = events.find(e => e.id == req.params.eventId);
     if (!event) {
         return res.status(404).json({ message: "Event not found" });
