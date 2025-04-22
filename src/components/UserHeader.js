@@ -1,17 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 
 const UserHeader = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [notifications, setNotifications] = useState([]);
     const inboxRef = useRef(null);
 
-    useEffect(() => {
-        fetch("/notifications")
-            .then(response => response.json())
-            .then(data => setNotifications(data))
-            .catch(error => console.error("Error fetching notifications:", error));
-    }, []);
+    const notifications = [
+        "Welcome to your dashboard!",
+        "You have 2 new messages.",
+        "Check out the new features we added.",
+    ];
 
     const togglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
@@ -69,7 +67,7 @@ const linkStyle = {
 
 const buttonStyle = {
     ...linkStyle,
-    fontFamily: 'inherit', 
+    fontFamily: 'inherit',
 };
 
 export default UserHeader;
