@@ -7,6 +7,7 @@ const authRoutes = require(path.join(__dirname, 'routes', 'authRoutes'));
 const historyRoutes = require(path.join(__dirname, 'routes', 'historyRoutes')); 
 const matchingRoutes = require(path.join(__dirname, 'routes', 'matchingRoutes'));
 const admineventsRoutes = require('./routes/admineventsRoutes');
+const eventsRouter = require('./routes/events');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/api/match', matchingRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/history', historyRoutes);
+app.use('/api/events', eventsRouter);
 
 app.get('/api/test-db', async (req, res) => {
   try {
@@ -30,6 +32,11 @@ app.get('/api/test-db', async (req, res) => {
     res.status(500).json({ error: 'Database connection failed' });
   }
 });
+
+app.get('/api/test', (req, res) => {
+  res.send('API is working');
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
