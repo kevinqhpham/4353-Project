@@ -39,7 +39,7 @@ function AdminPage() {
       <div className="header">
         <AdminHeader />
       </div>
-      <div className="mt-6 space-x-4">
+      <div className="header">
         <button 
           onClick={() => downloadReport("csv")} 
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
