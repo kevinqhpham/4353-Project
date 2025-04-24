@@ -13,7 +13,7 @@ import AdminPage from './pages/AdminPage.js'
 import AdminEvents from './pages/AdminEvents.js'
 
 const router = createBrowserRouter([
-  {path:"/",element:<App/>},
+  {path:"/",element:<Login/>},
   {path:"/signup",element:<Signup/>},
   {path:"/login",element:<Login/>},
   {path:"/userpage",element:<UserPage/>},
